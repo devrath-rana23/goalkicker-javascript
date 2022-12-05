@@ -7,6 +7,13 @@
 
 console.log("Hello World!");
 
+let isNum = "0";
+if(isNum){
+    console.log("Yes");
+}else{
+    console.log("No");
+}
+
 ////// Logging variables ////
 
 var foo = "kar";
