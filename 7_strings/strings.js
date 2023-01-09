@@ -374,3 +374,77 @@ console.log(string.lastIndexOf("l")); //10
 console.log(string.lastIndexOf("foo")); //-1
 
 //includes( searchString, start )
+// includes() will return a boolean that tells whether searchString exists in the string, starting from index start
+// (defaults to 0). This is better than indexOf() if you simply need to test for existence of a substring.
+
+string = "Hello World!";
+
+console.log(string.includes("Hello")); //true
+console.log(string.includes("World")); //true
+console.log(string.includes("World!")); //true
+console.log(string.includes("world")); //false
+console.log(string.includes("world!")); //false
+console.log(string.includes("World !")); //false
+
+// replace( regexp|substring, replacement|replaceFunction )
+
+// replace() will return a string that has all occurrences of substrings matching the RegExp regexp or string
+// substring with a string replacement or the returned value of replaceFunction .
+// Note that this does not modify the string in place, but returns the string with replacements.
+
+string = "Hello, World!";
+string = string.replace("Hello", "Bye");
+console.log(string); // "Bye, World!"
+string = string.replace(/W.{3}d/g, "Universe");
+console.log(string); // "Bye, Universe!"
+
+// replaceFunction can be used for conditional replacements for regular expression objects (i.e., with use with
+//   regexp ). The parameters are in the following order:
+
+// Parameter - Meaning
+// match - the substring that matches the entire regular expression
+// g1 , g2 , g3 , ... - the matching groups in the regular expression
+// offset - the oﬀset of the match in the entire string
+// string - the entire string
+
+// Note that all parameters are optional.
+string = "heLlo, woRlD!";
+string = string.replace(/([a-zA-Z])([a-zA-Z]+)/g, function (match, g1, g2) {
+  return g1.toUpperCase() + g2.toLowerCase();
+});
+console.log(string); // "Hello, World!"
+
+// Section 7.15: Find the index of a substring inside a string
+
+// The .indexOf method returns the index of a substring inside another string (if exists, or -1 if otherwise)
+
+console.log("hello world".indexOf("ld")); //9
+
+// .indexOf also accepts an additional numeric argument that indicates on what index should the function start
+// looking
+
+console.log("harr dee harr dee harr".indexOf("harr", 10)); //18
+
+// You should note that .indexOf is case sensitive
+console.log("Hellow World".indexOf("WOR")); //-1
+
+// Section 7.16: String to Upper Case
+// String.prototype.toUpperCase():
+console.log("hello".toUpperCase()); //HELLO
+
+// Section 7.17: String to Lower Case
+// String.prototype.toLowerCase()
+console.log("WORLD".toLowerCase()); //world
+
+//Section 7.18: Repeat a String
+// Version ≥ 6
+// This can be done using the .repeat() method:
+console.log("Abc".repeat(5)); //AbcAbcAbcAbcAbc
+console.log("Abc".repeat(0));
+// Version < 6
+// In the general case, this should be done using a correct polyﬁll for the ES6 String.prototype.repeat() method.
+// Otherwise, the idiom new Array(n + 1).join(myString) can repeat n times the string myString :
+let myString = "abc";
+let n = 3;
+console.log(new Array(n + 1).join(myString)); //abcabcabc
+console.log("Abc".repeat(-1)); //Uncaught RangeError: Invalid count value: -1 at String.repeat (<anonymous>)
