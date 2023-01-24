@@ -57,7 +57,7 @@
 // Note that these examples were generated on a browser in the Central Time Zone of the US, during Daylight Time,
 // as evidenced by the code. Where comparison with UTC was instructive, Date.prototype.toISOString() was used to show the date and time in UTC (the Z in the formatted string denotes UTC).
 
-const now = new Date();
+let now = new Date();
 console.log(now); //Wed Jan 11 2023 02:21:25 GMT+0530 (India Standard Time)
 console.log(now === "Wed Jan 11 2023 02:21:25 GMT+0530 (India Standard Time)"); //false
 console.log(now.toString()); //Wed Jan 11 2023 02:21:25 GMT+0530 (India Standard Time)
@@ -262,3 +262,217 @@ console.log(otherDate.toUTCString()); //Mon, 31 Jan 2000 12:00:00 GMT
 console.log(otherDate); //Mon Jan 31 2000 17:30:00 GMT+0530 (India Standard Time)
 
 // Section 8.4: Formatting a JavaScript date
+// Formatting a JavaScript date in modern browsers
+
+// In modern browsers (*), Date.prototype.toLocaleDateString() allows you to deﬁne the formatting of a Date in a
+// convenient manner.
+// It requires the following format :
+
+// dateObj.toLocaleDateString([locales [, options]])
+// The locales parameter should be a string with a BCP 47 language tag, or an array of such strings.
+
+// The options parameter should be an object with some or all of the following properties:
+
+// localeMatcher : possible values are "lookup" and "best fit" ; the default is "best fit"
+// timeZone : the only value implementations must recognize is "UTC" ; the default is the runtime's default time zone
+// hour12 :possible values are true and false ; the default is locale dependent
+// formatMatcher : possible values are "basic" and "best fit" ; the default is "best fit"
+// weekday : possible values are "narrow" , "short" & "long"
+// era : possible values are "narrow" , "short" & "long"
+// year : possible values are "numeric" & "2-digit"
+// month : possible values are "numeric" , "2-digit" , "narrow" , "short" & "long"
+// day : possible values are "numeric" & "2-digit"
+// hour : possible values are "numeric" & "2-digit"
+// minute : possible values are "numeric" & "2-digit"
+// second : possible values are "numeric" & "2-digit"
+// timeZoneName : possible values are "short" & "long"
+
+// How to use
+
+console.log(
+  new Date().toLocaleDateString("en-GB", {
+    month: "short",
+    year: "numeric",
+    day: "numeric",
+  })
+); //19 Jan 2023
+
+// Going custom
+// If Date.prototype.toLocaleDateString() isn't ﬂexible enough to fulﬁll whatever need you may have, you might
+// want to consider creating a custom Date object that looks like this:
+let DateObject = (function () {
+  let monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  let date = function (str) {
+    this.set(str);
+  };
+  date.prototype = {
+    set: function (str) {
+      let dateDef = str ? new Date(str) : new Date();
+      this.day = dateDef.getDate();
+      this.dayPadded = this.day < 10 ? "0" + this.day : "" + this.day;
+      this.month = dateDef.getMonth() + 1;
+      this.monthPadded = this.month < 10 ? "0" + this.month : "" + this.month;
+      this.monthName = monthNames[this.month - 1];
+      this.year = dateDef.getFullYear();
+    },
+    get: function (properties, separator) {
+      separator = separator ? separator : "-";
+      let ret = [];
+      for (let i in properties) {
+        ret.push(this[properties[i]]);
+      }
+      return ret.join(separator);
+    },
+  };
+  return date;
+})();
+
+console.log(JSON.stringify(new DateObject())); //{"day":19,"dayPadded":"19","month":1,"monthPadded":"01","monthName":"January","year":2023}
+
+// To get a formatted string, you could do something like this:
+console.log(new DateObject().get(["dayPadded", "monthPadded", "year"])); //19-01-2023
+
+// Section 8.5: Get the number of milliseconds elapsed since 1
+// January 1970 00:00:00 UTC
+
+// The static method Date.now returns the number of milliseconds that have elapsed since 1 January 1970 00:00:00
+// UTC. To get the number of milliseconds that have elapsed since that time using an instance of a Date object, use its
+// getTime method.
+// get milliseconds using static method now of Date
+console.log(Date.now()); //1674070563568
+// get milliseconds using method getTime of Date instance
+console.log(new Date().getTime()); //1674070563568
+
+// Section 8.6: Get the current time and date
+
+// Use new Date() to generate a new Date object containing the current date and time.
+
+// Note that Date() called without arguments is equivalent to new Date(Date.now()) .
+
+// Once you have a date object, you can apply any of the several available methods to extract its properties (e.g.
+//   getFullYear() to get the 4-digits year).
+
+// Below are some common date methods.
+
+// Get the current year
+let year = new Date().getFullYear();
+console.log(year);
+// Sample output: 2023
+
+// Get the current month
+let month = new Date().getMonth();
+console.log(month);
+// Sample output: 0 Please note that 0 = January. This is because months range from 0 to 11, so it is often desirable to add +1 to the
+// index.
+
+// Get the current day
+let day = new Date().getDate();
+console.log(day);
+// Sample output: 31
+
+// Get the current hour
+let hours = new Date().getHours();
+console.log(hours);
+// Sample output: 10
+
+// Get the current minutes
+let minutes = new Date().getMinutes();
+console.log(minutes);
+// Sample output: 39
+
+// Get the current seconds
+let seconds = new Date().getSeconds();
+console.log(seconds);
+// Sample output: 48
+
+// Get the current milliseconds
+// To get the milliseconds (ranging from 0 to 999) of an instance of a Date object, use its getMilliseconds method.
+let milliseconds = new Date().getMilliseconds();
+console.log(milliseconds);
+// Output: milliseconds right now
+
+// Convert the current time and date to a human-readable string
+now = new Date();
+
+// convert date to a string in UTC timezone format:
+console.log(now.toUTCString());
+// Output: Wed, 21 Jun 2017 09:13:01 GMT
+
+// The static method Date.now() returns the number of milliseconds that have elapsed since 1 January 1970 00:00:00
+// UTC. To get the number of milliseconds that have elapsed since that time using an instance of a Date object, use its
+// getTime method.
+
+// get milliseconds using static method now of Date
+console.log(Date.now());
+
+// get milliseconds using method getTime of Date instance
+console.log(new Date().getTime());
+
+// Section 8.7: Increment a Date Object
+// To increment date objects in JavaScript, we can usually do this:
+let checkoutDate = new Date();
+// Thu Jul 21 2016 10:05:13 GMT-0400 (EDT)
+checkoutDate.setDate(checkoutDate.getDate() + 1);
+
+console.log(checkoutDate); // Fri Jul 22 2016 10:05:13 GMT-0400 (EDT)
+// It is possible to use setDate to change the date to a day in the following month by using a value larger than the
+// number of days in the current month -
+
+checkoutDate = new Date();
+// Thu Jul 21 2016 10:05:13 GMT-0400 (EDT)
+checkoutDate.setDate(checkoutDate.getDate() + 12);
+console.log(checkoutDate); // Tue Aug 02 2016 10:05:13 GMT-0400 (EDT)
+// The same applies to other methods such as getHours(), getMonth(),etc.
+
+// Adding Work Days
+// If you wish to add work days (in this case I am assuming Monday - Friday) you can use the setDate function
+// although you need a little extra logic to account for the weekends (obviously this will not take account of national
+// holidays) -
+
+function addWorkDays(startDate, days) {
+  // Get the day of the week as a number (0 = Sunday, 1 = Monday, .... 6 = Saturday)
+  let dow = startDate.getDay();
+  let daysToAdd = days;
+  // If the current day is Sunday add one day
+  if (dow == 0) daysToAdd++;
+  // If the start date plus the additional days falls on or after the closest Saturday calculate weekends;
+  if (dow + daysToAdd >= 6) {
+    //Subtract days in current working week from work days
+    let remainingWorkDays = daysToAdd - (5 - dow);
+    //Add current working week's weekend
+    daysToAdd += 2;
+    if (remainingWorkDays > 5) {
+      //Add two days for each working week by calculating how many weeks are included
+      daysToAdd += 2 * Math.floor(remainingWorkDays / 5);
+      //Exclude final weekend if remainingWorkDays resolves to an exact number of weeks
+      if (remainingWorkDays % 5 == 0) daysToAdd -= 2;
+    }
+  }
+  startDate.setDate(startDate.getDate() + daysToAdd);
+  return startDate;
+}
+
+// Section 8.8: Convert to JSON
+date1 = new Date();
+console.log(date1.toJSON()); //2023-01-24T17:48:43.303Z
+
+// Chapter 9: Date Comparison
+// Section 9.1: Comparing Date values
+
+// To check the equality of Date values:
+date1 = new Date();
+let date2 = new Date(date1.valueOf() + 10);
+console.log(date1.valueOf() === date2.valueOf()); //false
