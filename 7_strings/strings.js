@@ -183,6 +183,39 @@ let x = `"Escaping " and ' can become very annoying`;
 console.log(x); //"Escaping " and ' can become very annoying
 
 //Section 7.6: Word Counter
+/*
+
+http://jsfiddle.net/RokoCB/5nfay7d1/206/
+
+<textarea id="text"></textarea>
+<div id="result"></div>
+<script>
+function wordCount( val ){
+    var wom = val.match(/\S+/g);
+    return {
+        charactersNoSpaces : val.replace(/\s+/g, '').length,
+        characters         : val.length,
+        words              : wom ? wom.length : 0,
+        lines              : val.split(/\r*\n/).length
+    };
+}
+
+
+var textarea = document.getElementById("text");
+var result   = document.getElementById("result");
+
+textarea.addEventListener("input", function(){
+  var v = wordCount( this.value );
+  result.innerHTML = (
+      "<br>Characters (no spaces):  "+ v.charactersNoSpaces +
+      "<br>Characters (and spaces): "+ v.characters +
+      "<br>Words: "+ v.words +
+      "<br>Lines: "+ v.lines
+  );
+}, false);
+</script>
+
+*/
 
 // Say you have a <textarea> and you want to retrieve info about the number of:
 // Characters (total)

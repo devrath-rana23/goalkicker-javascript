@@ -345,6 +345,17 @@ console.log(JSON.stringify(new DateObject())); //{"day":19,"dayPadded":"19","mon
 // To get a formatted string, you could do something like this:
 console.log(new DateObject().get(["dayPadded", "monthPadded", "year"])); //19-01-2023
 
+/*
+(*) According to the MDN, "modern browsers" means Chrome 24+, Firefox 29+, IE11, Edge12+, Opera 15+ & Safari
+nightly build
+
+https://softwareengineering.stackexchange.com/questions/56490/what-does-nightly-builds-mean
+What does 'Nightly Builds' mean?
+No, it means that every night, everything that has been checked into source control is built. That build is a "nightly build".
+
+
+*/
+
 // Section 8.5: Get the number of milliseconds elapsed since 1
 // January 1970 00:00:00 UTC
 
@@ -476,3 +487,35 @@ console.log(date1.toJSON()); //2023-01-24T17:48:43.303Z
 date1 = new Date();
 let date2 = new Date(date1.valueOf() + 10);
 console.log(date1.valueOf() === date2.valueOf()); //false
+
+// Note that you must use valueOf() or getTime() to compare the values of Date objects because the equality
+// operator will compare if two object references are the same. For example:
+date1 = new Date();
+date2 = new Date();
+console.log(date1 === date2); //false
+
+// Whereas if the variables point to the same object:
+date1 = new Date();
+date2 = date1;
+console.log(date1 === date2); //true
+
+// However, the other comparison operators will work as usual and you can use < and > to compare that one date is
+// earlier or later than the other. For example:
+date1 = new Date();
+date2 = new Date(date1.valueOf() + 10);
+console.log(date1 < date2); //true
+
+// It works even if the operator includes equality:
+date1 = new Date();
+date2 = new Date(date1.valueOf());
+console.log(date1 <= date2); //true
+
+// Section 9.2: Date Dierence Calculation
+// To compare the diﬀerence of two dates, we can do the comparison based on the timestamp.
+
+date1 = new Date();
+date2 = new Date(date1.valueOf() + 5000);
+let dateDiff = date1.valueOf() - date2.valueOf();
+let dateDiffInYears = dateDiff / 1000 / 60 / 60 / 24 / 365; //convert milliseconds into years
+console.log("Date difference in years : " + dateDiffInYears); //Date difference in years : -1.5854895991882292e-7
+
